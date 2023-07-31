@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Jumbotron, Container, CardColumns, Card, Button } from 'react-bootstrap';
+import React from 'react';
+//import { Jumbotron, Container, CardColumns, Card, Button } from 'react-bootstrap';
 
 import { getMe, deleteBook } from '../utils/API';
 import Auth from '../utils/auth';
@@ -11,7 +11,7 @@ const SavedBooks = () => {
   // use this to determine if `useEffect()` hook needs to run again
   const userDataLength = Object.keys(userData).length;
 
-  useEffect(() => {
+/*   useEffect(() => {
     const getUserData = async () => {
       try {
         const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -35,7 +35,7 @@ const SavedBooks = () => {
 
     getUserData();
   }, [userDataLength]);
-
+ */
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -67,12 +67,11 @@ const SavedBooks = () => {
 
   return (
     <>
-      <Jumbotron fluid className='text-light bg-dark'>
-        <Container>
+      <Container fluid className='text-light bg-dark'>
+        
           <h1>Viewing saved books!</h1>
         </Container>
-      </Jumbotron>
-      <Container>
+           <Container>
         <h2>
           {userData.savedBooks.length
             ? `Viewing ${userData.savedBooks.length} saved ${userData.savedBooks.length === 1 ? 'book' : 'books'}:`

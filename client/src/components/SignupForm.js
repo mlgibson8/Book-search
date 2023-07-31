@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 
-import { createUser } from '../utils/API';
+import { SIGNUP_MUTATION } from '../utils/mutations';
 import Auth from '../utils/auth';
 
 const SignupForm = () => {
@@ -28,7 +28,7 @@ const SignupForm = () => {
     }
 
     try {
-      const response = await createUser(userFormData);
+      const response = await SIGNUP_MUTATION(userFormData);
 
       if (!response.ok) {
         throw new Error('something went wrong!');
