@@ -1,4 +1,4 @@
-const {user} = require('../models');
+const {User} = require('../models');
 const {signToken} = require('../utils/auth');
 const {AuthenticationError} = require('apollo-server-express');
 
@@ -27,7 +27,7 @@ const resolvers = {
             const token = signToken(user);
             return {token, user};
         },
-        addUser: async (parent, args) => {
+        signupUser: async (parent, args) => {
             const user = await User.create(args);
             const token = signToken(user);
             return {token, user};
@@ -42,6 +42,16 @@ const resolvers = {
                 return updatedUser;
             }
         },
+        removeBook: async (parent, {bookId}, context) => {
+            if (context.user) {
+                const updatedUser = await User.findByIdAndUpdate(
+                    {_id: context.user._id},
+                    {$pull: {savedBooks: {bookId: bookId}}},
+                    {new: true}
+                );
+                return updatedUser;
+            }
+    },
     },
 };
 module.exports = resolvers;

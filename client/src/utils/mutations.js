@@ -1,12 +1,12 @@
 import {gql} from '@apollo/client';
 
 export const SIGNUP_USER = gql`
-   mutation signup(
+   mutation signupUser(
     $username: String!,
     $email: String!,
     $password: String!
    ){
-         signup(
+         signupUser(
             username: $username,
             email: $email,
             password: $password
@@ -16,11 +16,10 @@ export const SIGNUP_USER = gql`
                     _id
                     username
                     email
-                    bookCount
-                }
+                    }
             }
     }
-`
+`;
 export const LOGIN_USER = gql`
     mutation login(
         $email: String!,
@@ -34,46 +33,43 @@ export const LOGIN_USER = gql`
             user {
                 _id
                 username
-                email
-                bookCount
+                
             }
         }
     }
 `
 export const SAVE_BOOK = gql`
-    mutation saveBook(
-        $bookId: String!,
-        $image: String!,
-        $title: String!,
-        $authors: [String],
-        $link: String!,
-        $description: String!) {
-            saveBook(
-                bookId: $bookId,
-                image: $image,
-                title: $title,
-                authors: $authors,
-                link: $link,
-                description: $description
-            ){
-                id
-                username
-                email
-                savedBooks {
-                    bookId                 
-            }
+    mutation saveBook($bookData: BookInput!) {
+        saveBook(bookData: $bookData){
+      _id
+        username
+        bookCount
+        savedBooks {
+            bookId
+            authors
+            description
+            title
+            image
+            link
         }
     }
-    `
+}
+`;
+               
+    
 export const REMOVE_BOOK = gql`
     mutation removeBook($bookId: String!) {
         removeBook(bookId: $bookId){
             id
             username
-            email
             savedBooks {
                 bookId
+                authors
+                description
+                title
+                image
+                link
             }
         }
     }
-`
+`;
