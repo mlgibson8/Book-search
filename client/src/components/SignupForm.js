@@ -35,7 +35,7 @@ const [addUser] = useMutation(ADD_USER);
       const {data} = await addUser({
        variables: {...userFormData},});
 
-      const { token, user } = data.signupUser;
+      const { token, user } = data.addUser;
       console.log(user);
       Auth.login(token);
     } catch (err) {
