@@ -16,6 +16,7 @@ const SavedBooks = () => {
   console.log("loading", loading);
   console.log("data", data);
   let userData = data?.me || {};
+  console.log(userData)
   
  const [removeBook] = useMutation(REMOVE_BOOK); 
 

@@ -16,6 +16,7 @@
     "concurrently": "^8.2.0"
   },
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "apollo-boost": "^0.4.9",
     "react-bootstrap": "^2.8.0"
   }
