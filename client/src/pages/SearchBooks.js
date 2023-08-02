@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import {  Container, Col, Form, Button, Card, } from 'react-bootstrap';
+import {  Container, Col, Form, Button, Card, Row } from 'react-bootstrap';
 import {  useMutation } from '@apollo/client';
-
+import { SAVE_BOOK } from '../utils/mutations';
 import Auth from '../utils/auth';
 import { searchGoogleBooks } from '../utils/API';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
-import { SAVE_BOOK_MUTATION } from '../utils/mutations';
+
 
 const SearchBooks = () => {
   // create state for holding returned google api data
@@ -53,7 +53,7 @@ const SearchBooks = () => {
     }
   };
   // create mutation for saving a book to our database
-  const [saveBook, ] = useMutation(SAVE_BOOK_MUTATION);
+  const [saveBook, ] = useMutation(SAVE_BOOK);
 
   // create function to handle saving a book to our database
   const handleSaveBook = async (bookId) => {
@@ -73,25 +73,20 @@ const SearchBooks = () => {
       
 
       // if book successfully saves to user's account, save book id to state
-      setSavedBookIds((prevSavedBookIds) => {
-        if (!prevSavedBookIds.includes(bookToSave.bookId)) {
-        return [...prevSavedBookIds, bookToSave.bookId];
-    } else {
+      setSavedBookIds([...saveBookIds, bookToSave.bookId]);
+    } catch (err) {      
       console.error('Book id already exists');
-      return prevSavedBookIds;
+      
     }
-  });
-} catch (err) {
-  console.error(err);
-}
+  };
 
 return (
   <>
-    <Jumbotron fluid className='text-light bg-dark'>
+    <div className='text-light bg-dark p-5' >
       <Container>
         <h1>Search for Books!</h1>
         <Form onSubmit={handleFormSubmit}>
-          <Form.Row>
+          <Row>
             <Col xs={12} md={8}>
               <Form.Control
                 name='searchInput'
@@ -107,28 +102,31 @@ return (
                 Submit Search
               </Button>
             </Col>
-          </Form.Row>
+          </Row>
         </Form>
       </Container>
-    </Jumbotron>
+    </div>
 
     <Container>
-      <h2>
+      <h2 className='p-5'>
         {searchedBooks.length
           ? `Viewing ${searchedBooks.length} results:`
           : 'Search for a book to begin'}
       </h2>
-      <CardColumns>
-        {searchedBooks.map((book) => {
-          return (
-            <Card key={book.bookId} border='dark'>
-              {book.image ? (
+      <Row>
+        {searchedBooks.map((book) => (
+         <Col Col key={book.bookId} md='4'>
+          <Card border='dark'>
+            {book.image ? (
                 <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' />
               ) : null}
               <Card.Body>
                 <Card.Title>{book.title}</Card.Title>
                 <p className='small'>Authors: {book.authors}</p>
-                <Card.Text>{book.description}</Card.Text>
+                <Card.Text>{book.description}
+                <br />
+                <a href={book.link} target="_blank" rel="noreferrer">More Info</a>
+                 </Card.Text>
                 {Auth.loggedIn() && (
                   <Button
                     disabled={savedBookIds?.some((savedBookId) => savedBookId === book.bookId)}
@@ -141,12 +139,12 @@ return (
                 )}
               </Card.Body>
             </Card>
-          );
-        })}
-      </CardColumns>
+          </Col>
+        ))}
+      </Row>
     </Container>
   </>
 );
 };
-};
+
 export default SearchBooks;
